@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Book Catcher</string>
+    <string name="add_sheet">add sheet</string>>
+    <string name="change_goal">change goal</string>
+    <string name="goal">daily goal</string>
+    <string name="yesterday">yesterday</string>
+    <string name="weekly_progress">weekly progress</string>
+    <string name="today">today</string>
+</resources>
