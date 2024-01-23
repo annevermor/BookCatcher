@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp") version "1.8.21-1.0.11"
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -53,6 +53,7 @@ android {
 dependencies {
     //Ycharts
     implementation("co.yml:ycharts:2.1.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
     // Testing
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -73,14 +74,15 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    //splashscreen
-    implementation("androidx.core:core-splashscreen:1.0.0")
 
     //Room
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     // To use Kotlin Symbol Processing (KSP)
-    //ksp("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+    // To use Kotlin annotation processing tool (kapt)
+    //kapt("androidx.room:room-compiler:$roomVersion")
 
 }

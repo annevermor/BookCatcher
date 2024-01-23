@@ -1,21 +1,15 @@
 package com.example.bookcatcher.ui.screens
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -23,23 +17,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import co.yml.charts.axis.AxisConfig
+import androidx.lifecycle.viewmodel.compose.viewModel
 import co.yml.charts.axis.AxisData
-import co.yml.charts.axis.DataCategoryOptions
 import co.yml.charts.common.model.PlotType
 import co.yml.charts.common.model.Point
 import co.yml.charts.common.utils.DataUtils
@@ -59,17 +48,18 @@ import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
 import co.yml.charts.ui.piechart.charts.DonutPieChart
-import co.yml.charts.ui.piechart.charts.PieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
 import com.example.bookcatcher.R
-import com.example.bookcatcher.viewModel.MainViewModel
+import com.example.bookcatcher.viewModel.AppViewModelProvider
+import com.example.bookcatcher.viewModel.MainScreenViewModel
 import com.example.compose.BookCatcherTheme
+import kotlinx.coroutines.coroutineScope
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
-    val uiState = MainViewModel()
+    val viewModel: MainScreenViewModel = viewModel(factory = (AppViewModelProvider.Factory))
     Scaffold(topBar = {
         BookTopAppBar(
             title = stringResource(R.string.app_name),
@@ -107,7 +97,7 @@ fun MainScreen() {
                         DonutChartModule()
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = uiState.mainUiState.number.toString(),
+                                text = viewModel.mainScreenUiState.number.toString(),
                                 style = MaterialTheme.typography.displaySmall
                             )
                             Text(
@@ -134,7 +124,7 @@ fun MainScreen() {
                             Text(text = stringResource(R.string.add_sheet))
                         }
                         Button(
-                            onClick = { uiState.reduceNum() },
+                            onClick = { viewModel.reduceNum() },
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
@@ -357,7 +347,7 @@ fun GroupBarChartModule(){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookTopAppBar(title: String, modifier: Modifier = Modifier) {
+fun BookTopAppBar(title: String) {
     CenterAlignedTopAppBar(title = { Text(title) })
 }
 

@@ -42,6 +42,7 @@ import co.yml.charts.ui.linechart.model.LineType
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
+import com.example.bookcatcher.data.Book
 import com.example.bookcatcher.ui.screens.MainScreen
 import com.example.compose.BookCatcherTheme
 import kotlinx.coroutines.delay
