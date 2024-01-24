@@ -11,10 +11,10 @@ import com.example.bookcatcher.BookCatcherApplication
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer { MainScreenViewModel(
-            this.createSavedStateHandle(),
             bookCatcherApplication().container.booksRepository
         ) }
     }
 }
+
 fun CreationExtras.bookCatcherApplication(): BookCatcherApplication =
     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BookCatcherApplication)

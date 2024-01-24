@@ -6,4 +6,10 @@
     <string name="yesterday">yesterday</string>
     <string name="weekly_progress">weekly progress</string>
     <string name="today">today</string>
+    <string name="credits">Credits</string>
+    <string name="author">author</string>
+    <string name="title">title</string>
+    <string name="page">page</string>
+    <string name="developer">Novikov Anton</string>
+
 </resources>

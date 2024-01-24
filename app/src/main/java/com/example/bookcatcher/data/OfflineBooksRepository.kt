@@ -11,5 +11,7 @@ class OfflineBooksRepository(private val bookDao: BookDao): BooksRepository {
 
     override suspend fun insertBook(book: Book) = bookDao.insert(book)
 
+    override suspend fun insertPosition(readingPos: ReadingPos) = bookDao.insertPosition(readingPos)
+
     override suspend fun updateBook(book: Book) = bookDao.update(book)
 }

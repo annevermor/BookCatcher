@@ -9,6 +9,8 @@ interface BooksRepository {
 
     suspend fun insertBook(book: Book)
 
+    suspend fun insertPosition(readingPos: ReadingPos)
+
     suspend fun deleteBook(book: Book)
 
     suspend fun updateBook(book: Book)

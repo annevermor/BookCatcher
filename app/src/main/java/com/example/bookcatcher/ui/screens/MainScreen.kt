@@ -1,23 +1,35 @@
 package com.example.bookcatcher.ui.screens
 
+import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarState
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -50,26 +62,40 @@ import co.yml.charts.ui.linechart.model.ShadowUnderLine
 import co.yml.charts.ui.piechart.charts.DonutPieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
 import co.yml.charts.ui.piechart.models.PieChartData
+import com.example.bookcatcher.BookBottomAppBar
+import com.example.bookcatcher.BookTopAppBar
 import com.example.bookcatcher.R
+import com.example.bookcatcher.navigation.NavigationDestination
 import com.example.bookcatcher.viewModel.AppViewModelProvider
 import com.example.bookcatcher.viewModel.MainScreenViewModel
 import com.example.compose.BookCatcherTheme
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+
+object MainScreenDestination : NavigationDestination {
+    override val route = "home"
+    override val titleRes = R.string.app_name
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     val viewModel: MainScreenViewModel = viewModel(factory = (AppViewModelProvider.Factory))
-    Scaffold(topBar = {
-        BookTopAppBar(
-            title = stringResource(R.string.app_name),
-        )
-    }
+    val coroutineScope = rememberCoroutineScope()
+    Scaffold(
+        topBar = {
+            BookTopAppBar(
+                title = stringResource(R.string.app_name),
+                canNavigateBack = false,
+                scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+            )
+        },
+        bottomBar = { BookBottomAppBar() }
     ) { innerPadding ->
         Column(Modifier.verticalScroll(rememberScrollState())) {
             Card(
                 modifier = Modifier.padding(
-                    top = innerPadding.calculateTopPadding(),
+                    top = innerPadding.calculateTopPadding() + dimensionResource(R.dimen.padding_small),
                     end = dimensionResource(R.dimen.padding_small),
                     start = dimensionResource(R.dimen.padding_small),
                     bottom = 0.dp
@@ -116,7 +142,7 @@ fun MainScreen() {
                         )
                     ) {
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = { coroutineScope.launch { viewModel.deleteBook() } },
                             modifier = Modifier
                                 .padding(end = dimensionResource(R.dimen.padding_small))
                                 .fillMaxWidth(0.5f)
@@ -124,7 +150,7 @@ fun MainScreen() {
                             Text(text = stringResource(R.string.add_sheet))
                         }
                         Button(
-                            onClick = { viewModel.reduceNum() },
+                            onClick = { coroutineScope.launch { viewModel.addBook() } },
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
@@ -149,19 +175,24 @@ fun MainScreen() {
                 }
             }
 
-            Card(modifier = Modifier
-                .padding(
-                    top = 0.dp,
-                    end = dimensionResource(R.dimen.padding_small),
-                    start = dimensionResource(R.dimen.padding_small),
-                    bottom = dimensionResource(R.dimen.padding_small)
-                )
+            Card(
+                modifier = Modifier
+                    .padding(
+                        top = 0.dp,
+                        end = dimensionResource(R.dimen.padding_small),
+                        start = dimensionResource(R.dimen.padding_small),
+                        bottom = dimensionResource(R.dimen.padding_small)
+                    )
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
+                    ) {
                     Text(
                         text = stringResource(R.string.weekly_progress),
                         style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                        modifier = Modifier
+                            .padding(dimensionResource(R.dimen.padding_small),)
                     )
                     LineChartModule()
                 }
@@ -277,7 +308,8 @@ fun LineChartModule() {
                     ),
                     SelectionHighlightPopUp()
                 ),
-                Line(dataPoints = pointsData2,
+                Line(
+                    dataPoints = pointsData2,
                     LineStyle(
                         color = MaterialTheme.colorScheme.tertiary,
                         lineType = LineType.SmoothCurve(),
@@ -293,7 +325,8 @@ fun LineChartModule() {
                             )
                         )
                     ),
-                    SelectionHighlightPopUp())
+                    SelectionHighlightPopUp()
+                )
             )
         ),
         isZoomAllowed = true,
@@ -311,44 +344,6 @@ fun LineChartModule() {
                 .height(200.dp)
         )
     }
-}
-
-@Composable
-fun GroupBarChartModule(){
-    val groupBarData = BarPlotData(
-        groupBarList = DataUtils.getGroupBarChartData(
-            3,
-            500,
-            5
-        ),
-        barColorPaletteList = getColorPaletteList(5)
-    )
-
-    val xAxisData = AxisData.Builder()
-        .axisStepSize(30.dp)
-        .labelData { index -> "$index" }
-        .build()
-
-    val yAxisData = AxisData.Builder()
-        .steps(10)
-        .labelAndAxisLinePadding(20.dp)
-        .axisOffset(20.dp)
-        .labelData { index -> (index * (500 / 10)).toString() }
-        .build()
-
-    val groupBarChartData = GroupBarChartData(
-        barPlotData = groupBarData,
-        xAxisData = xAxisData,
-        yAxisData = yAxisData
-    )
-
-    GroupBarChart(modifier = Modifier.height(300.dp), groupBarChartData = groupBarChartData)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BookTopAppBar(title: String) {
-    CenterAlignedTopAppBar(title = { Text(title) })
 }
 
 @Composable
