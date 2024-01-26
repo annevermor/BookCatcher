@@ -37,7 +37,7 @@ class MainScreenViewModel(
 //        booksRepository.insertBook(
 //            Book(title = "asd", author = "qwe", pageNumbers = 1, currentPage = 0)
 //        )
-        booksRepository.insertPosition(ReadingPos(bookId = 1, date = "01.24.2024", position = 0))
+        booksRepository.deletePosition(ReadingPos(bookId = 1, date = "01.24.2024", position = 0))
     }
 
     suspend fun deleteBook() {

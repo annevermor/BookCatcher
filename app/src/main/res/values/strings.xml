@@ -11,5 +11,9 @@
     <string name="title">title</string>
     <string name="page">page</string>
     <string name="developer">Novikov Anton</string>
+    <string name="add_book">Add book</string>
+    <string name="edit_book">Edit book</string>
+    <string name="bookshelf">Bookshelf</string>
+    <string name="nothing_to_show">Nothing to show</string>
 
 </resources>

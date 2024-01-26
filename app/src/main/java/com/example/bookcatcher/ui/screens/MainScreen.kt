@@ -34,12 +34,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import co.yml.charts.axis.AxisData
 import co.yml.charts.common.model.PlotType
 import co.yml.charts.common.model.Point
@@ -79,23 +81,40 @@ object MainScreenDestination : NavigationDestination {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    navigateUp: ()-> Unit,
+    navigateToBookshelf: () -> Unit,
+    navigateToMainScreen: () -> Unit,
+    navigateToStatisticsScreen: () -> Unit
+) {
     val viewModel: MainScreenViewModel = viewModel(factory = (AppViewModelProvider.Factory))
     val coroutineScope = rememberCoroutineScope()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     Scaffold(
         topBar = {
             BookTopAppBar(
                 title = stringResource(R.string.app_name),
                 canNavigateBack = false,
-                scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+                scrollBehavior = scrollBehavior
             )
         },
-        bottomBar = { BookBottomAppBar() }
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        bottomBar = {
+            BookBottomAppBar(
+                navigateToBookshelf = navigateToBookshelf,
+                navigateToMainScreen = { },
+                navigateToStatisticsScreen = navigateToStatisticsScreen
+            )
+        }
     ) { innerPadding ->
-        Column(Modifier.verticalScroll(rememberScrollState())) {
+        Column(
+            Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(innerPadding)
+        ) {
             Card(
                 modifier = Modifier.padding(
-                    top = innerPadding.calculateTopPadding() + dimensionResource(R.dimen.padding_small),
+                    top = dimensionResource(R.dimen.padding_small),
                     end = dimensionResource(R.dimen.padding_small),
                     start = dimensionResource(R.dimen.padding_small),
                     bottom = 0.dp
@@ -186,13 +205,12 @@ fun MainScreen() {
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())
-                    ) {
+                ) {
                     Text(
                         text = stringResource(R.string.weekly_progress),
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier
-                            .padding(dimensionResource(R.dimen.padding_small),)
+                            .padding(dimensionResource(R.dimen.padding_small))
                     )
                     LineChartModule()
                 }
@@ -350,6 +368,11 @@ fun LineChartModule() {
 @Preview(showBackground = true, showSystemUi = true)
 fun PreviewMainScreen() {
     BookCatcherTheme(useDarkTheme = true) {
-        MainScreen()
+        MainScreen(
+            navigateToMainScreen = {},
+            navigateUp = {},
+            navigateToStatisticsScreen = {},
+            navigateToBookshelf = {}
+        )
     }
 }
