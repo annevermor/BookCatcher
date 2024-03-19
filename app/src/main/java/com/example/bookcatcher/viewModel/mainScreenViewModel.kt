@@ -25,7 +25,6 @@ class MainScreenViewModel(
     private val booksRepository: BooksRepository
 ) : ViewModel() {
     var mainScreenUiState by mutableStateOf(MainScreenUiState())
-        private set
 
     fun reduceNum() {
         mainScreenUiState = MainScreenUiState(

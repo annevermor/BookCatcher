@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -32,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bookcatcher.navigation.BookNavHost
 import com.example.bookcatcher.ui.screens.BookshelfScreenDestination
 import com.example.bookcatcher.ui.screens.MainScreenDestination
+import com.example.compose.BookCatcherTheme
 
 @Composable
 fun BookCatcherApp(navController: NavHostController = rememberNavController()){
@@ -65,7 +68,7 @@ fun BookBottomAppBar(
     navigateToMainScreen: () -> Unit,
     navigateToStatisticsScreen: () -> Unit
 ) {
-    NavigationBar(modifier = Modifier.height(60.dp)) {
+    NavigationBar(modifier = Modifier.height(45.dp)) {
         Row (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -91,3 +94,18 @@ fun BookBottomAppBar(
 
     }
 }
+
+
+@Preview()
+@Composable
+fun BottomAppBarPreview(){
+    BookCatcherTheme(useDarkTheme = true) {
+        BookBottomAppBar(
+            navigateToBookshelf = {},
+            navigateToStatisticsScreen = {},
+            navigateToMainScreen = {}
+        )
+    }
+}
+
+

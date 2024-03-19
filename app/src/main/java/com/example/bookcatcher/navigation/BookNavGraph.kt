@@ -20,7 +20,6 @@ import com.example.bookcatcher.ui.screens.MainScreenDestination
 @Composable
 fun BookNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
 ){
     NavHost(
         navController = navController,
@@ -28,10 +27,8 @@ fun BookNavHost(
     ){
         composable(route = MainScreenDestination.route){
             MainScreen(
-                navigateToMainScreen = { navController.navigate(MainScreenDestination.route) },
                 navigateToBookshelf = { navController.navigate(BookshelfScreenDestination.route) },
                 navigateToStatisticsScreen = {navController.navigate(CreditsScreenDestination.route)},
-                navigateUp = {navController.navigateUp()}
             )
         }
         composable(route = CreditsScreenDestination.route){
@@ -44,7 +41,7 @@ fun BookNavHost(
             BookEditScreen()
         }
         composable(BookshelfScreenDestination.route){
-            BookshelfScreen()
+            BookshelfScreen(books = listOf())
         }
     }
 }

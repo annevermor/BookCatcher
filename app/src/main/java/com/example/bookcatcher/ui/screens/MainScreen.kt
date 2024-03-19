@@ -82,12 +82,11 @@ object MainScreenDestination : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    navigateUp: ()-> Unit,
     navigateToBookshelf: () -> Unit,
-    navigateToMainScreen: () -> Unit,
     navigateToStatisticsScreen: () -> Unit
 ) {
-    val viewModel: MainScreenViewModel = viewModel(factory = (AppViewModelProvider.Factory))
+    //val viewModel: MainScreenViewModel = viewModel(factory = (AppViewModelProvider.Factory))
+    //val uiState = viewModel.mainScreenUiState
     val coroutineScope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     Scaffold(
@@ -142,7 +141,7 @@ fun MainScreen(
                         DonutChartModule()
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = viewModel.mainScreenUiState.number.toString(),
+                                text = "25",
                                 style = MaterialTheme.typography.displaySmall
                             )
                             Text(
@@ -161,7 +160,7 @@ fun MainScreen(
                         )
                     ) {
                         Button(
-                            onClick = { coroutineScope.launch { viewModel.deleteBook() } },
+                            onClick = {  },
                             modifier = Modifier
                                 .padding(end = dimensionResource(R.dimen.padding_small))
                                 .fillMaxWidth(0.5f)
@@ -169,7 +168,7 @@ fun MainScreen(
                             Text(text = stringResource(R.string.add_sheet))
                         }
                         Button(
-                            onClick = { coroutineScope.launch { viewModel.addBook() } },
+                            onClick = {  },
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
@@ -369,8 +368,6 @@ fun LineChartModule() {
 fun PreviewMainScreen() {
     BookCatcherTheme(useDarkTheme = true) {
         MainScreen(
-            navigateToMainScreen = {},
-            navigateUp = {},
             navigateToStatisticsScreen = {},
             navigateToBookshelf = {}
         )
